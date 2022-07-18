@@ -1,5 +1,4 @@
 import {defineStore} from 'pinia'
-import {action} from '@/store/editor/actions/page'
 import {ElementProps, PageProps, ProductProps} from "@/store/editor/state/product";
 import {Page} from "@/store/editor/state/page";
 
@@ -51,10 +50,10 @@ export const useProductStore = defineStore({
             Object.assign(this.product, payload)
         },
         actSetPage(payload: any) {
-            const page:any = this.product.children?.find((page: PageProps) => {
+            const page: any = this.product.children?.find((page: PageProps) => {
                 return page.id === payload.id
             })
-            page.name=payload.name
+            page.name = payload.name
         },
         actChangeActivePageId(payload: string) {
             this.activeState.active_page_id = payload
@@ -67,6 +66,12 @@ export const useProductStore = defineStore({
         },
         actSetElementStyle(payload: any) {
             Object.assign(this.getActiveElement.style, payload)
+        },
+        actContextMenuDeleteElement() {
+            const idx: any = this.getActivePage?.children?.findIndex((el: ElementProps) => {
+                return el.id === this.getActiveElement.id
+            })
+            this.getActivePage?.children?.splice(idx, 1)
         }
     }
 })

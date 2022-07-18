@@ -1,7 +1,8 @@
 <template>
   <div class="shape absolute select-none" :style="getStyle(props.element.style,props.isActive)" :data-bind="props.isActive"
        @mousedown="handleMouseDownShape">
-    <div class="shape-point" v-for="item in (props.isActive ? pointList :[])" :key="item" :style="getPointStyle(item)">
+    <div class="shape-point" @mousedown="mousedownForMark($event,item)" v-for="item in (props.isActive ? pointList :[])" :key="item"
+         :style="getPointStyle(item)">
     </div>
     <slot></slot>
   </div>
@@ -93,6 +94,42 @@ const getPointStyle = (point: string) => {
   return style
 }
 
+const mousedownForMark = (downEvent: MouseEvent, point: string) => {
+  downEvent.stopPropagation()
+  downEvent.preventDefault()
+  const pos = {...props.element.style}
+  let height = pos.height
+  let width = pos.width
+  let top = pos.y
+  let left = pos.x
+  let startX = downEvent.clientX
+  let startY = downEvent.clientY
+  let increment = 0
+  let move = (moveEvent: MouseEvent) => {
+    let currX = moveEvent.clientX
+    let currY = moveEvent.clientY
+    let disY = (currY - startY)
+    let disX = (currX - startX)
+    let hasT = /t/.test(point)
+    let hasB = /b/.test(point)
+    let hasL = /l/.test(point)
+    let hasR = /r/.test(point)
+    let newHeight = +height + (hasT ? -disY : hasB ? disY : 0)
+    let newWidth = +width + (hasL ? -disX : hasR ? disX : 0)
+    pos.height = newHeight > 0 ? newHeight : 0
+    pos.width = newWidth > 0 ? newWidth : 0
+    pos.x = +left + (hasL ? disX : 0)
+    pos.y = +top + (hasT ? disY : 0)
+    increment++
+    store.actSetElementStyle(pos)
+  }
+  let up = () => {
+    document.removeEventListener('mousemove', move)
+    document.removeEventListener('mouseup', up)
+  }
+  document.addEventListener('mousemove', move)
+  document.addEventListener('mouseup', up)
+}
 </script>
 
 <style scoped lang="scss">

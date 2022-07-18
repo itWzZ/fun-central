@@ -1,5 +1,5 @@
 <template>
-  <button :style="getStyle(props.style)" class="f-button" :class="{'active':props.isActive}">{{ props.name }}</button>
+  <button :style="getStyle(props.style)" class="f-button element" :class="{'active':props.isActive}">{{ props.name }}</button>
 </template>
 
 <script setup lang="ts">
@@ -8,8 +8,10 @@ import {StyleProps} from "@/store/editor/state/product";
 const props = defineProps(['style', 'name', 'isActive'])
 const getStyle = (style: StyleProps) => {
   return {
-    width: `${style.width}px`,
-    height: `${style.height}px`
+    // width: `${style.width}px`,
+    // height: `${style.height}px`
+    width: '100%',
+    height: '100%'
   }
 }
 </script>

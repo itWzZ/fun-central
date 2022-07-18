@@ -13,10 +13,9 @@ const piniaPlugin = (context: PiniaPluginContext) => {
     const {store} = context
     const data = getStorage(`${store.$id}`)
     store.$subscribe(() => {
-        // console.log("store",store.$state)
         setStorage(`${store.$id}`, toRaw(store.$state))
     })
     return {...data}
 }
-// store.use(piniaPlugin)
+store.use(piniaPlugin)
 export default store

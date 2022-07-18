@@ -3,7 +3,7 @@
     <div class="w-full space-y-4 ">
       <transition-group name="fade-slide">
         <div v-for="(item,index) in arrPage "
-             @click="handleChangePage(item.id,index)"
+             @click="handleChangePage(item.id,index,item.name)"
              :key="item"
              class="page-idx flex items-center cursor-pointer border-b border-gray-200 transition-all rounded pl-3 h-16 "
              :class="{'text-blue-500 current-box':activePageId===item.id,'hover:text-blue-500':activePageId!==item.id}">
@@ -11,7 +11,7 @@
           <div class="w-full h-full flex items-center" style="font-size: 15px;">
             <div class="serial"><span>{{ index + 1 }}</span></div>
             <span class="text-sm text-left ml-4 w-48 text-ellipsis overflow-hidden break-words whitespace-nowrap">{{ item.name }}</span>
-            <edit-outlined @click="handleOpenModal(item.id,item.name)" class="ml-3 text-black hidden editor-icon"/>
+            <edit-outlined @click.stop="handleOpenModal(item.id,item.name)" class="ml-3 text-black hidden editor-icon"/>
           </div>
           <a-popconfirm
               title="确定删除此页面?"
@@ -35,7 +35,7 @@
     </div>
   </div>
   <a-modal v-model:visible="visible" title="页面重命名" @ok="handleOk">
-    <a-input  v-model:value="pageTitle.pageName" :maxlength="30" placeholder="请输入页面名称"/>
+   <span class="mr-1">页面标题：</span> <a-input  class="w-4/5" v-model:value="pageTitle.pageName" :maxlength="30" placeholder="请输入页面名称"/>
   </a-modal>
 </template>
 
@@ -65,8 +65,9 @@ const handleDeletePage = (id: string, e: any) => {
   store.actDeletePage(id)
   message.success('删除页面成功！')
 }
-const handleChangePage = (id: string, idx: number) => {
+const handleChangePage = (id: string, idx: number,name:string) => {
   store.actChangeActivePageId(id)
+  message.success(`切换到${name}页面`)
 }
 const visible = ref(false)
 const pageTitle = reactive({id: '', pageName: ''})
