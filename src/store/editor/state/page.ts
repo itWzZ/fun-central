@@ -1,6 +1,6 @@
 import {ElementProps, PageProps} from "@/store/editor/state/product";
 import {Element} from "@/store/editor/state/element";
-import {getId} from "@/utils.ts/getId"
+import {getId} from "@/utils/getId"
 
 export class Page implements PageProps {
     id: number | string

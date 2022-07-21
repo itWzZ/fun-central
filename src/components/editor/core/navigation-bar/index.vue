@@ -10,16 +10,23 @@
       <span class="text-lg font-semibold flex items-center ml-3">组件</span>
     </div>
     <div class="space-y-4 element-box" @dragstart="handleDragStart">
-      <a-button type="primary" v-for="(item,index) in list" :draggable="true" :data-index="index" :key="index">{{ item.label }}</a-button>
+      <a-button @dblclick="handleDblClick(item.label)" type="primary" v-for="(item,index) in list" :draggable="true" :data-index="index" :key="index">{{ item.label }}</a-button>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import {list} from "@/components/components-list"
-
+import {useProductStore} from "@/store/editor";
+import {Element} from "@/store/editor/state/element";
+const store=useProductStore()
 const handleDragStart = (e: any) => {
   e.dataTransfer.setData('index', e.target.dataset.index)
+}
+const handleDblClick=(type:string) => {
+  store.actAddElement(new Element({
+    commandType: type, name: type, style: {x: 550, y: 200, width: 200, height: 100}
+  }))
 }
 </script>
 

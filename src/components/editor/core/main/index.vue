@@ -11,12 +11,14 @@
           :isActive="item.id===store.activeState.active_element_id"
       />
     </Shape>
+    <Line/>
     <ContextMenu :data="contextMenu" @closeContextMenu="closeContextMenu"/>
   </div>
 </template>
 
 <script setup lang="ts">
 import Shape from '@/components/editor/core/main/shape.vue'
+import Line from '@/components/editor/core/main/mark-line.vue'
 import ContextMenu from "@/components/editor/core/main/context-menu.vue"
 import {list} from '@/components/components-list'
 import {Element} from '@/store/editor/state/element'
@@ -31,12 +33,14 @@ const handleDrop = (e: any) => {
   const component = list[e.dataTransfer.getData('index')]
   const rectInfo = (Editor.value as any).getBoundingClientRect()
   store.actAddElement(new Element({
-    commandType: component.label, name: component.label, style: {x: e.clientX - rectInfo.x, y: e.clientY - rectInfo.y, width: 200, height: 100}
+    commandType: component.label,
+    name: component.label,
+    style: {x: e.clientX - rectInfo.x.toFixed() - 100, y: e.clientY - rectInfo.y - 50, width: 200, height: 100}
   }))
 }
 const handleDragOver = (e: any) => {
   e.preventDefault()
-  e.dataTransfer.dropEffect = 'move'
+  e.dataTransfer.dropEffect = 'copy'
 }
 const elementList = computed(() => {
   return store.getActivePage?.children

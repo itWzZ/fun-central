@@ -22,11 +22,16 @@ export const useProductStore = defineStore({
         }
     },
     getters: {
-        getActivePage(state) {
-            return state.product.children?.find((page: any) => {
+        getActivePage:(state:any) => {
+            return state.product.children?.find((page: PageProps) => {
                 return page.id === state.activeState.active_page_id
             })
         },
+        // getActivePage(state) {
+        //     return state.product.children?.find((page: any) => {
+        //         return page.id === state.activeState.active_page_id
+        //     })
+        // },
         getActiveElement(state) {
             return (state as any).getActivePage.children.find((el: any) => {
                 return el.id === state.activeState.active_element_id
@@ -72,6 +77,6 @@ export const useProductStore = defineStore({
                 return el.id === this.getActiveElement.id
             })
             this.getActivePage?.children?.splice(idx, 1)
-        }
+        },
     }
 })

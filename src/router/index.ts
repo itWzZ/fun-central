@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
-import { start, close} from '@/utils.ts/nporgress'
+import { start, close} from '@/utils/nporgress'
 const routes: Array<RouteRecordRaw> = [
     {
         path: '/login',

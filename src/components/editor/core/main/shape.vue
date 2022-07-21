@@ -11,8 +11,10 @@
 <script setup lang="ts">
 import {useProductStore} from "@/store/editor";
 import {StyleProps} from "@/store/editor/state/product";
+import {inject, nextTick} from "vue";
 
 const props = defineProps(['element', 'isActive'])
+const bus = inject<any>('bus')
 const store = useProductStore()
 const getStyle = (style: StyleProps, isActive: boolean) => {
   return {
@@ -37,8 +39,12 @@ const handleMouseDownShape = (e: any) => {
     pos.y = curY - startY + startTop
     pos.x = curX - startX + startLeft
     store.actSetElementStyle(pos)
+    nextTick(() => {
+      bus.emit('move',false)
+    })
   }
   const up = () => {
+    bus.emit('unMove')
     document.removeEventListener('mousemove', move)
     document.removeEventListener('mouseup', up)
   }
@@ -122,8 +128,12 @@ const mousedownForMark = (downEvent: MouseEvent, point: string) => {
     pos.y = +top + (hasT ? disY : 0)
     increment++
     store.actSetElementStyle(pos)
+    nextTick(() => {
+      bus.emit('move',true)
+    })
   }
   let up = () => {
+    bus.emit('unMove')
     document.removeEventListener('mousemove', move)
     document.removeEventListener('mouseup', up)
   }

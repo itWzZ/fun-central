@@ -1,5 +1,5 @@
 import {ElementProps, StyleProps} from "@/store/editor/state/product";
-import {getId} from "@/utils.ts/getId"
+import {getId} from "@/utils/getId"
 
 export class Element implements ElementProps {
     id?: number | string;
