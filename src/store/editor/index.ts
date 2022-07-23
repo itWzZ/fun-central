@@ -13,7 +13,7 @@ export const useProductStore = defineStore({
                 webPort: '5002',
                 postServer: 5000,
                 dmxIp: 5001,
-                children: [new Page({name: '新页面', id: '1'})]
+                children: [new Page({title: '新页面', id: '1'})]
             } as ProductProps,
             activeState: {
                 active_page_id: '1',
@@ -22,16 +22,11 @@ export const useProductStore = defineStore({
         }
     },
     getters: {
-        getActivePage:(state:any) => {
+        getActivePage: (state: any) => {
             return state.product.children?.find((page: PageProps) => {
                 return page.id === state.activeState.active_page_id
             })
         },
-        // getActivePage(state) {
-        //     return state.product.children?.find((page: any) => {
-        //         return page.id === state.activeState.active_page_id
-        //     })
-        // },
         getActiveElement(state) {
             return (state as any).getActivePage.children.find((el: any) => {
                 return el.id === state.activeState.active_element_id
@@ -58,7 +53,7 @@ export const useProductStore = defineStore({
             const page: any = this.product.children?.find((page: PageProps) => {
                 return page.id === payload.id
             })
-            page.name = payload.name
+            page.title = payload.title
         },
         actChangeActivePageId(payload: string) {
             this.activeState.active_page_id = payload
@@ -72,11 +67,17 @@ export const useProductStore = defineStore({
         actSetElementStyle(payload: any) {
             Object.assign(this.getActiveElement.style, payload)
         },
+        actSetCurrentElementStyle(payload: any) {
+           this.getActiveElement.style[payload.label]=payload.e
+        },
         actContextMenuDeleteElement() {
             const idx: any = this.getActivePage?.children?.findIndex((el: ElementProps) => {
                 return el.id === this.getActiveElement.id
             })
             this.getActivePage?.children?.splice(idx, 1)
+        },
+        actSetCurrentElementProps(payload: any) {
+            Object.assign(this.getActiveElement, payload)
         },
     }
 })

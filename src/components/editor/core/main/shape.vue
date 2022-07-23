@@ -1,6 +1,6 @@
 <template>
   <div class="shape absolute select-none" :style="getStyle(props.element.style,props.isActive)" :data-bind="props.isActive"
-       @mousedown="handleMouseDownShape">
+       @mousedown.="handleMouseDownShape">
     <div class="shape-point" @mousedown="mousedownForMark($event,item)" v-for="item in (props.isActive ? pointList :[])" :key="item"
          :style="getPointStyle(item)">
     </div>
@@ -11,7 +11,7 @@
 <script setup lang="ts">
 import {useProductStore} from "@/store/editor";
 import {StyleProps} from "@/store/editor/state/product";
-import {inject, nextTick} from "vue";
+import {inject, nextTick, onUnmounted} from "vue";
 
 const props = defineProps(['element', 'isActive'])
 const bus = inject<any>('bus')
@@ -27,6 +27,7 @@ const getStyle = (style: StyleProps, isActive: boolean) => {
 }
 const handleMouseDownShape = (e: any) => {
   e.stopPropagation()
+  e.preventDefault()
   store.actSetCurrentElement(props.element.id)
   const pos = {...props.element.style}
   const startX = e.clientX
@@ -40,7 +41,7 @@ const handleMouseDownShape = (e: any) => {
     pos.x = curX - startX + startLeft
     store.actSetElementStyle(pos)
     nextTick(() => {
-      bus.emit('move',false)
+      bus.emit('move', false)
     })
   }
   const up = () => {
@@ -129,7 +130,7 @@ const mousedownForMark = (downEvent: MouseEvent, point: string) => {
     increment++
     store.actSetElementStyle(pos)
     nextTick(() => {
-      bus.emit('move',true)
+      bus.emit('move', true)
     })
   }
   let up = () => {

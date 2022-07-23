@@ -1,7 +1,7 @@
 <template>
   <div class="h-full py-10 flex justify-between items-center">
-    <div class="h-full" style="width: 14vw">
-      <Navigation></Navigation>
+    <div class="h-full" style="width: 14vw" >
+      <Navigation ></Navigation>
     </div>
     <div class="bg-white h-full rounded-xl" style="width: 70vw">
       <Main></Main>

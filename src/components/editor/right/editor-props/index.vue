@@ -2,80 +2,108 @@
   <div style="height: 76vh">
     <div class="flex space-y-6 flex-wrap">
       <div class="flex justify-center items-center "><span class="text-sm text-left w-14  font-semibold">标题：</span>
-        <a-input :maxlength="30" class="w-56 h-9 " :disabled="!activeElement" :value="activeElement?.commandType" placeholder="标题"/>
+        <a-input :maxlength="30" class="w-56 h-9 " @change="changeTitle" :disabled="!activeElement" :value="activeElement?.title" />
       </div>
       <div class="flex flex-wrap text-sm pl-1">
         <div><span class="font-semibold ">左：</span>
-          <a-input-number :disabled="!activeElement" :value="activeElement?.style?.x" id="inputNumber"/>
+          <a-input-number @change="changeElementStyle('x',$event)" :min="0" :max="1300" :disabled="!activeElement" :value="activeElement?.style?.x"
+                          id="inputNumber"/>
         </div>
         <div class="ml-10"><span class="font-semibold">上：</span>
-          <a-input-number :disabled="!activeElement" :value='activeElement?.style?.y' id="inputNumber"/>
+          <a-input-number @change="changeElementStyle('y',$event)" :min="0" :max="700" :disabled="!activeElement" :value='activeElement?.style?.y'
+                          id="inputNumber"/>
         </div>
         <div class="mt-6"><span class="font-semibold">宽：</span>
-          <a-input-number :disabled="!activeElement" :value="activeElement?.style?.width" id="inputNumber"/>
+          <a-input-number @change="changeElementStyle('width',$event)" :min="0" :disabled="!activeElement" :value="activeElement?.style?.width"
+                          id="inputNumber"/>
         </div>
         <div class="ml-10 mt-6"><span class="font-semibold">高：</span>
-          <a-input-number :disabled="!activeElement" :value="activeElement?.style?.height" id="inputNumber"/>
+          <a-input-number @change="changeElementStyle('height',$event)" :min="0" :disabled="!activeElement" :value="activeElement?.style?.height"
+                          id="inputNumber"/>
         </div>
       </div>
       <div class="flex justify-center items-center "><span class="text-sm text-left w-14 font-semibold">Ipad：</span>
-        <a-input :maxlength="30" :disabled="!activeElement" class="w-56 h-9 " placeholder="Ipad"/>
+        <a-input :maxlength="30" :disabled="!activeElement" class="w-56 h-9 " />
       </div>
       <div class="flex justify-center items-center "><span class="text-sm  text-left w-14  font-semibold">设备：</span>
         <a-select
             ref="select"
-            v-model:value="equipment"
+            :value="activeElement?.name"
             :disabled="!activeElement"
             style="width: 224px"
-            @change="handleChange"
+            @change="handleChangeName"
         >
-          <a-select-option value="jack">Jack</a-select-option>
-          <a-select-option value="lucy">Lucy</a-select-option>
-          <a-select-option value="disabled">Disabled</a-select-option>
-          <a-select-option value="Yiminghe">yiminghe</a-select-option>
+          <a-select-option v-for="(item,index) in list" :key="index" :value="item.label"/>
         </a-select>
       </div>
-      <div class="flex justify-center items-center "><span class="text-sm text-left w-14   font-semibold">名称：</span>
+      <div class="flex justify-center items-center "><span class="text-sm text-left w-14 font-semibold">名称：</span>
         <a-select
             ref="select"
-            v-model:value="equipment"
+            :value="activeElement?.code"
             :disabled="!activeElement"
-            :options="optionData"
             style="width: 224px"
-            @change="handleChange"
+            @change="handleChangeCode"
         >
+          <a-select-option v-for="(item,index) in equipmentNameData ?? []" :key="index" :value="item.code">{{ item.name }}</a-select-option>
         </a-select>
       </div>
       <div class="flex justify-center items-center "><span class="text-sm text-left w-14  font-semibold">控制ip：</span>
-        <a-input :disabled="!activeElement" :maxlength="30" class="w-56 h-9 " placeholder="控制ip"/>
+        <a-input :disabled="!activeElement" :value="activeElement?.ip" :maxlength="30" class="w-56 h-9 "/>
       </div>
       <div class="flex justify-center items-center "><span class="text-sm text-left w-14  font-semibold">指令：</span>
-        <a-input :disabled="!activeElement" :maxlength="30" class="w-56 h-9 " placeholder="指令"/>
+        <a-input :disabled="!activeElement" @change="handleChangeIptCode" :value="activeElement?.code" :maxlength="30" class="w-56 h-9" />
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import {computed, onMounted, reactive, ref} from "vue";
+import {computed, onBeforeMount, ref, watch} from "vue";
 import {useProductStore} from "@/store/editor";
 import {sendMessage} from '@/server'
+import {list} from '@/components/components-list'
+
+const data = ref<any>(null)
+onBeforeMount(async () => {
+  data.value = await sendMessage('host')
+})
 
 const store = useProductStore()
 const activeElement = computed(() => {
   return store.getActiveElement
 })
-const equipment = ref('')
-const optionData = ref([{value: 1, label: 'a1'}, {value: 2, label: 'a2'}, {value: 3, label: 'a3'}])
-const handleChange = (e: any) => {
-  console.log(e)
+const equipmentNameData = ref([])
+watch(activeElement, () => {
+  const item = list.find((item) => {
+    return item.label === activeElement.value?.name
+  })
+  setTimeout(() => {
+    equipmentNameData.value = data.value[item?.value ?? ''] ?? []
+    if (!activeElement.value?.code && activeElement.value) {
+      store.actSetCurrentElementProps({code: (equipmentNameData.value[0] as any)?.code})
+    }
+  })
+}, {immediate: true})
+
+const changeTitle = (e: any) => {
+  store.actSetCurrentElementProps({title: e.target.value})
 }
-const data = ref(null)
-onMounted(async () => {
-  const res = await sendMessage('host')
-  console.log(res)
-  data.value = res
-})
+const changeElementStyle = (label: string, e: number) => {
+  store.actSetCurrentElementStyle({label, e})
+}
+const handleChangeName = (e: string) => {
+  const item = list.find((item) => {
+    return item.label === e
+  })
+  equipmentNameData.value = data.value[item?.value ?? '']
+  store.actSetCurrentElementProps({name: e})
+}
+const handleChangeCode = (e: string) => {
+  store.actSetCurrentElementProps({code: e})
+}
+const handleChangeIptCode=(e:any) => {
+  // store.actSetCurrentElementProps({code:e.target.value})
+}
 </script>
 
 

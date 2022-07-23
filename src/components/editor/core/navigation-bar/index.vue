@@ -25,7 +25,7 @@ const handleDragStart = (e: any) => {
 }
 const handleDblClick=(type:string) => {
   store.actAddElement(new Element({
-    commandType: type, name: type, style: {x: 550, y: 200, width: 200, height: 100}
+    title: type, name: type, style: {x: 550, y: 200, width: 200, height: 100}
   }))
 }
 </script>

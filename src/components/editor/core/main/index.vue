@@ -7,7 +7,7 @@
           is="f-button"
           class="element-style"
           :style="item.style"
-          :name="item.name"
+          :title="item.title"
           :isActive="item.id===store.activeState.active_element_id"
       />
     </Shape>
@@ -33,11 +33,13 @@ const handleDrop = (e: any) => {
   const component = list[e.dataTransfer.getData('index')]
   const rectInfo = (Editor.value as any).getBoundingClientRect()
   store.actAddElement(new Element({
-    commandType: component.label,
     name: component.label,
+    title: component.label,
+    code:'',
     style: {x: e.clientX - rectInfo.x.toFixed() - 100, y: e.clientY - rectInfo.y - 50, width: 200, height: 100}
   }))
 }
+// 接收drag事件
 const handleDragOver = (e: any) => {
   e.preventDefault()
   e.dataTransfer.dropEffect = 'copy'
@@ -46,6 +48,7 @@ const elementList = computed(() => {
   return store.getActivePage?.children
 })
 const contextMenu = reactive({isShow: false, top: '', left: ''})
+// 右键打开模板
 const handleOpenContextMenu = (e: any) => {
   e.preventDefault()
   e.stopPropagation()
@@ -62,9 +65,11 @@ const handleOpenContextMenu = (e: any) => {
     Object.assign(contextMenu, {isShow: true, top, left})
   }
 }
+// 关闭右键面板
 const closeContextMenu = () => {
   contextMenu.isShow = false
 }
+// 点击空白区域关闭右键面板
 const handleMouseDown = (e: any) => {
   if (!e.target.className.includes('menu')) {
     contextMenu.isShow = false

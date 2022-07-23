@@ -3,15 +3,15 @@
     <div class="w-full space-y-4 ">
       <transition-group name="fade-slide">
         <div v-for="(item,index) in arrPage "
-             @click="handleChangePage(item.id,index,item.name)"
+             @click="handleChangePage(item.id,index,item.title)"
              :key="item"
              class="page-idx flex items-center cursor-pointer border-b border-gray-200 transition-all rounded pl-3 h-16 "
              :class="{'text-blue-500 current-box':activePageId===item.id,'hover:text-blue-500':activePageId!==item.id}">
 
           <div class="w-full h-full flex items-center" style="font-size: 15px;">
             <div class="serial"><span>{{ index + 1 }}</span></div>
-            <span class="text-sm text-left ml-4 w-48 text-ellipsis overflow-hidden break-words whitespace-nowrap">{{ item.name }}</span>
-            <edit-outlined @click.stop="handleOpenModal(item.id,item.name)" class="ml-3 text-black hidden editor-icon"/>
+            <span class="text-sm text-left ml-4 w-48 text-ellipsis overflow-hidden break-words whitespace-nowrap">{{ item.title }}</span>
+            <edit-outlined @click.stop="handleOpenModal(item.id,item.title)" class="ml-3 text-black hidden editor-icon"/>
           </div>
           <a-popconfirm
               title="确定删除此页面?"
@@ -59,7 +59,7 @@ const handleClickAddPage = () => {
     message.warning("页面数量不超过6个！");
     return
   }
-  store.actAddPage(new Page({name: `新页面`}))
+  store.actAddPage(new Page({title: `新页面`}))
 }
 const handleDeletePage = (id: string, e: any) => {
   store.actDeletePage(id)
@@ -77,7 +77,7 @@ const handleOpenModal = (id: string, name: string) => {
   visible.value = true
 }
 const handleOk = () => {
-  store.actSetPage({id: pageTitle.id, name: pageTitle.pageName})
+  store.actSetPage({id: pageTitle.id, title: pageTitle.pageName})
   visible.value=false
 }
 </script>

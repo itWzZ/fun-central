@@ -19,7 +19,7 @@ export interface ProductProps {
 
 export interface PageProps {
     id?: number | string,
-    name: string,
+    title: string,
     style?: StyleProps
     pluginType?: string
     children?: ElementProps[]
@@ -27,12 +27,12 @@ export interface PageProps {
 
 export interface ElementProps {
     id?: number | string
-    commandType: string
+    name: string
+    title: string
     pluginType?: string
-    name: string,
     style: StyleProps
     ipadCode?: string
-    ip?: number,
+    ip?: string,
     ms?: number,
     mc?: number,
     code?: string,

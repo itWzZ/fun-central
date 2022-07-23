@@ -4,7 +4,7 @@
 </template>
 
 <script setup lang="ts">
-import {computed, inject, reactive} from "vue";
+import {computed, inject, onUnmounted, reactive} from "vue";
 import {useProductStore} from "@/store/editor";
 
 const store = useProductStore()
@@ -13,6 +13,7 @@ const bus = inject<any>('bus')
 bus.on('move', (flag: boolean) => {
   calcVHLine(flag)
 })
+
 bus.on('unMove', () => {
   clearVLine()
   clearHLine()
@@ -44,8 +45,9 @@ const clearHLine = () => {
 const calcVHLine = (isPointMove: boolean) => {
   clearVLine()
   clearHLine()
-  let referElementsXCoords: number[] = []
-  let referElementsYCoords: number[] = []
+  let referElementsXCoords: number[] = [0, 1266 / 2, 1266]
+  let referElementsYCoords: number[] = [0, 777 / 2, 777]
+
   // 拿到未被选中的元素的位置大小信息
   referElements.value?.forEach((el: any) => {
     const width: any = el.style.width
@@ -117,6 +119,10 @@ const calcVHLine = (isPointMove: boolean) => {
 const setElementPosition = (data: any) => {
   store.actSetElementStyle(data)
 }
+onUnmounted(() => {
+  bus.off('move')
+  bus.off('unMove')
+})
 </script>
 
 <style scoped lang="scss">

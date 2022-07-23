@@ -1,11 +1,11 @@
 <template>
-  <button :style="getStyle(props.style)" class="f-button element" :class="{'active':props.isActive}">{{ props.name }}</button>
+  <button :style="getStyle(props.style)" class="f-button element" :class="{'active':props.isActive}">{{ props.title }}</button>
 </template>
 
 <script setup lang="ts">
 import {StyleProps} from "@/store/editor/state/product";
 
-const props = defineProps(['style', 'name', 'isActive'])
+const props = defineProps(['style', 'title', 'isActive'])
 const getStyle = (style: StyleProps) => {
   return {
     // width: `${style.width}px`,
