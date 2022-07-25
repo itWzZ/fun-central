@@ -27,6 +27,14 @@ import {computed, reactive, ref} from "vue";
 
 const store = useProductStore()
 const Editor = ref(null)
+const getPageIdx = () => {
+  return (store.product.children?.findIndex((item) => {
+    return item.id === store.activeState.active_page_id
+  }) ?? 0) + 1
+}
+const getElIdx = () => {
+  return store.getActivePage.children.length + 1
+}
 const handleDrop = (e: any) => {
   e.preventDefault()
   e.stopPropagation()
@@ -35,9 +43,11 @@ const handleDrop = (e: any) => {
   store.actAddElement(new Element({
     name: component.label,
     title: component.label,
-    code:'',
+    code: '',
+    ipadCode:`IPAD${getPageIdx()}_${getElIdx()}`,
     style: {x: e.clientX - rectInfo.x.toFixed() - 100, y: e.clientY - rectInfo.y - 50, width: 200, height: 100}
   }))
+  console.log(store.getActivePage.children)
 }
 // 接收drag事件
 const handleDragOver = (e: any) => {

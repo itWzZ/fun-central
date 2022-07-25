@@ -1,6 +1,6 @@
 <template>
   <div class="shape absolute select-none" :style="getStyle(props.element.style,props.isActive)" :data-bind="props.isActive"
-       @mousedown.="handleMouseDownShape">
+       @mousedown="handleMouseDownShape">
     <div class="shape-point" @mousedown="mousedownForMark($event,item)" v-for="item in (props.isActive ? pointList :[])" :key="item"
          :style="getPointStyle(item)">
     </div>
@@ -28,6 +28,7 @@ const getStyle = (style: StyleProps, isActive: boolean) => {
 const handleMouseDownShape = (e: any) => {
   e.stopPropagation()
   e.preventDefault()
+  bus.emit('changeProps')
   store.actSetCurrentElement(props.element.id)
   const pos = {...props.element.style}
   const startX = e.clientX

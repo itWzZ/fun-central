@@ -1,6 +1,7 @@
 import {ElementProps, StyleProps} from "@/store/editor/state/product";
 import {getId} from "@/utils/getId"
 
+
 export class Element implements ElementProps {
     id?: number | string;
     title: string
@@ -19,10 +20,10 @@ export class Element implements ElementProps {
         this.pluginType = "element"
         this.title = element.title
         this.style = element.style
-        this.ipadCode = element.ipadCode ?? '1'
+        this.ipadCode = element.ipadCode ?? ''
         this.ip = element.ip ?? '127.0.0.1'
-        this.ms = element.ms ?? 312
-        this.mc = element.mc ?? 21
+        this.ms = element.ms ?? 0
+        this.mc = element.mc ?? 0
         this.code = element.code
     }
 }

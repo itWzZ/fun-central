@@ -2,6 +2,7 @@ import {defineStore} from 'pinia'
 import {ElementProps, PageProps, ProductProps} from "@/store/editor/state/product";
 import {Page} from "@/store/editor/state/page";
 
+
 export const useProductStore = defineStore({
     id: 'editor',
     state: () => {
@@ -13,11 +14,11 @@ export const useProductStore = defineStore({
                 webPort: '5002',
                 postServer: 5000,
                 dmxIp: 5001,
-                children: [new Page({title: '新页面', id: '1'})]
+                children: [new Page({title: '新页面', id: '133'})]
             } as ProductProps,
             activeState: {
-                active_page_id: '1',
-                active_element_id: '0'
+                active_page_id: '133',
+                active_element_id: '0',
             }
         }
     },
@@ -68,7 +69,7 @@ export const useProductStore = defineStore({
             Object.assign(this.getActiveElement.style, payload)
         },
         actSetCurrentElementStyle(payload: any) {
-           this.getActiveElement.style[payload.label]=payload.e
+            this.getActiveElement.style[payload.label] = payload.e
         },
         actContextMenuDeleteElement() {
             const idx: any = this.getActivePage?.children?.findIndex((el: ElementProps) => {
@@ -77,7 +78,7 @@ export const useProductStore = defineStore({
             this.getActivePage?.children?.splice(idx, 1)
         },
         actSetCurrentElementProps(payload: any) {
-            Object.assign(this.getActiveElement, payload)
+            Object.assign(this.getActiveElement ?? {}, payload)
         },
     }
 })

@@ -20,9 +20,16 @@
 import Nav from "@/components/editor/right/navigation-bar/index.vue"
 import Product from '@/components/editor/right/product/index.vue'
 import Editor from '@/components/editor/right/editor-props/index.vue'
-import {ref} from "vue";
+import {inject, onUnmounted, ref} from "vue";
 
 const activeKey = ref('2')
+const bus = inject<any>('bus')
+bus.on('changeProps', () => {
+  activeKey.value = '1'
+})
+onUnmounted(() => {
+  bus.off('changeProps')
+})
 </script>
 
 <style scoped lang="scss">
