@@ -9,6 +9,7 @@ export class Element implements ElementProps {
     name: string // 不同类型按钮
     ipadCode: string
     pluginType?: string
+    bg?: string
     ip?: string
     ms?: number
     mc?: number
@@ -16,6 +17,7 @@ export class Element implements ElementProps {
 
     constructor(element: ElementProps) {
         this.id = getId()
+        this.bg = element.bg ?? ''
         this.name = element.name
         this.pluginType = "element"
         this.title = element.title

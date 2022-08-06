@@ -1,25 +1,11 @@
 import {defineStore} from 'pinia'
 import {ElementProps, PageProps, ProductProps} from "@/store/editor/state/product";
-import {Page} from "@/store/editor/state/page";
-
-
 export const useProductStore = defineStore({
     id: 'editor',
     state: () => {
         return {
-            product: {
-                id: 1,
-                title: '中控系统编辑页面',
-                ipServer: '127.0.0.1',
-                webPort: '5002',
-                postServer: 5000,
-                dmxIp: 5001,
-                children: [new Page({title: '新页面', id: '133'})]
-            } as ProductProps,
-            activeState: {
-                active_page_id: '133',
-                active_element_id: '0',
-            }
+            product: {},
+            activeState: {active_page_id: '', active_element_id: ''}
         }
     },
     getters: {
@@ -28,13 +14,17 @@ export const useProductStore = defineStore({
                 return page.id === state.activeState.active_page_id
             })
         },
-        getActiveElement(state) {
-            return (state as any).getActivePage.children.find((el: any) => {
+        getActiveElement(state: any) {
+            return state.getActivePage.children?.find((el: ElementProps) => {
                 return el.id === state.activeState.active_element_id
             })
         }
     },
     actions: {
+        initState(payload: ProductProps) {
+            this.activeState.active_page_id = payload.children[0].id
+            this.product = payload
+        },
         actAddPage(payload: PageProps) {
             this.product.children?.push(payload)
         },
@@ -44,14 +34,14 @@ export const useProductStore = defineStore({
             })
             this.product.children?.splice(idx ?? 9999, 1)
             if (payload === this.activeState.active_page_id) {
-                this.activeState.active_page_id = (this.product.children as any)[0].id
+                this.activeState.active_page_id = this.product.children[0].id
             }
         },
         actSetProduct(payload: any) {
             Object.assign(this.product, payload)
         },
         actSetPage(payload: any) {
-            const page: any = this.product.children?.find((page: PageProps) => {
+            const page = this.product.children?.find((page: PageProps) => {
                 return page.id === payload.id
             })
             page.title = payload.title
@@ -72,7 +62,7 @@ export const useProductStore = defineStore({
             this.getActiveElement.style[payload.label] = payload.e
         },
         actContextMenuDeleteElement() {
-            const idx: any = this.getActivePage?.children?.findIndex((el: ElementProps) => {
+            const idx = this.getActivePage?.children?.findIndex((el: ElementProps) => {
                 return el.id === this.getActiveElement.id
             })
             this.getActivePage?.children?.splice(idx, 1)

@@ -1,19 +1,13 @@
 <template>
-  <button :style="getStyle(props.style)" class="f-button element" :class="{'active':props.isActive}">{{ props.title }}</button>
+  <button class="f-button element w-full h-full bg-center bg-no-repeat bg-cover" :class="{'active':props.isActive}"
+          :style="{backgroundImage:`url(${props.attribute.bg})`}">{{ props.attribute.bg ? '' : props.attribute.title }}
+  </button>
 </template>
 
 <script setup lang="ts">
-import {StyleProps} from "@/store/editor/state/product";
 
-const props = defineProps(['style', 'title', 'isActive'])
-const getStyle = (style: StyleProps) => {
-  return {
-    // width: `${style.width}px`,
-    // height: `${style.height}px`
-    width: '100%',
-    height: '100%'
-  }
-}
+
+const props = defineProps(['attribute', 'isActive'])
 </script>
 <style scoped lang="scss">
 .active {
@@ -26,7 +20,7 @@ const getStyle = (style: StyleProps) => {
   line-height: 1;
   white-space: nowrap;
   cursor: pointer;
-  background: #fff;
+  //background: #fff;
   border: 1px solid #dcdfe6;
   color: #606266;
   -webkit-appearance: none;

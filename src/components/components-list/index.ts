@@ -1,2 +1,1 @@
-
 export const list = [{label: '主机',value:'host'}, {label: '投影仪',value:'projector'}, {label: '灯光/电源',value:'light'}, {label: '客户端转发',value:'socket'}, {label: '播放控制',value: 'playcontrol'}, {label: '其他',value:'other'}]

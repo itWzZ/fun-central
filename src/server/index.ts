@@ -6,3 +6,6 @@ const server = axios.create({
 export const sendMessage = (data: string) => {
     return server.post('/', {name: data}).then(res => res.data).catch(error => error)
 }
+export const uploadFile = (data: any) => {
+    return server.post('/upload', data).then(res => res.data).catch(error => error)
+}

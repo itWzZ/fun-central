@@ -1,7 +1,6 @@
 <template>
   <div class="h-full w-full">
-    <button @click="handleClick">31231</button>
-    login
+    <button @click="handleClick">editor</button>
   </div>
 </template>
 
@@ -11,7 +10,7 @@ import {useRouter} from "vue-router";
 const router = useRouter()
 
 const handleClick = () => {
-  router.push('/')
+  router.push('/editor')
 }
 </script>
 

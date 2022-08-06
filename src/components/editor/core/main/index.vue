@@ -6,8 +6,7 @@
       <component
           is="f-button"
           class="element-style"
-          :style="item.style"
-          :title="item.title"
+          :attribute="item"
           :isActive="item.id===store.activeState.active_element_id"
       />
     </Shape>
@@ -24,11 +23,12 @@ import {list} from '@/components/components-list'
 import {Element} from '@/store/editor/state/element'
 import {useProductStore} from "@/store/editor";
 import {computed, reactive, ref} from "vue";
+import {PageProps} from "@/store/editor/state/product";
 
 const store = useProductStore()
 const Editor = ref(null)
 const getPageIdx = () => {
-  return (store.product.children?.findIndex((item) => {
+  return (store.product.children?.findIndex((item:PageProps) => {
     return item.id === store.activeState.active_page_id
   }) ?? 0) + 1
 }
@@ -40,14 +40,14 @@ const handleDrop = (e: any) => {
   e.stopPropagation()
   const component = list[e.dataTransfer.getData('index')]
   const rectInfo = (Editor.value as any).getBoundingClientRect()
+  console.log('rectinfo',rectInfo,'e',e.clientX,e.clientY)
   store.actAddElement(new Element({
     name: component.label,
     title: component.label,
     code: '',
-    ipadCode:`IPAD${getPageIdx()}_${getElIdx()}`,
+    ipadCode: `IPAD${getPageIdx()}_${getElIdx()}`,
     style: {x: e.clientX - rectInfo.x.toFixed() - 100, y: e.clientY - rectInfo.y - 50, width: 200, height: 100}
   }))
-  console.log(store.getActivePage.children)
 }
 // 接收drag事件
 const handleDragOver = (e: any) => {

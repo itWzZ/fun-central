@@ -14,7 +14,7 @@ export interface ProductProps {
     postServer: number | string
     webPort: number | string
     dmxIp: number | string
-    children?: PageProps[]
+    children: PageProps[]
 }
 
 export interface PageProps {
@@ -28,6 +28,7 @@ export interface PageProps {
 export interface ElementProps {
     id?: number | string
     name: string
+    bg?: string
     title: string
     pluginType?: string
     style: StyleProps
@@ -45,7 +46,7 @@ export class Product implements ProductProps {
     postServer: number | string
     webPort: number | string
     dmxIp: number | string
-    children?: PageProps[]
+    children: PageProps[]
 
     constructor(product: ProductProps) {
         this.id = product.id

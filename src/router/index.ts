@@ -12,15 +12,29 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('@/pages/login.vue')
     },
     {
-        path: '/',
-        name: 'Index',
+        path: '/preview',
+        name: 'Preview',
         meta: {
-            title: '首页',
+            title: '预览',
+            keepAlive: true,
+            requireAuth: false
+        },
+        component: () => import('@/pages/preview.vue')
+    },
+    {
+        path: '/editor',
+        name: 'Editor',
+        meta: {
+            title: '编辑器',
             keepAlive: true,
             requireAuth: true
         },
         component: () => import('@/components/editor/index.vue')
-    }
+    },
+    {
+        path: '/',
+        redirect: '/login'
+    },
 ]
 
 const router = createRouter({

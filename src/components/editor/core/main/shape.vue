@@ -1,7 +1,7 @@
 <template>
   <div class="shape absolute select-none" :style="getStyle(props.element.style,props.isActive)" :data-bind="props.isActive"
        @mousedown="handleMouseDownShape">
-    <div class="shape-point" @mousedown="mousedownForMark($event,item)" v-for="item in (props.isActive ? pointList :[])" :key="item"
+    <div class="shape-point" @mousedown="mousedownForMark($event,item)" v-for="(item,index) in (props.isActive ? pointList :[])" :key="item"
          :style="getPointStyle(item)">
     </div>
     <slot></slot>
@@ -11,17 +11,18 @@
 <script setup lang="ts">
 import {useProductStore} from "@/store/editor";
 import {StyleProps} from "@/store/editor/state/product";
-import {inject, nextTick, onUnmounted} from "vue";
+import {inject, nextTick} from "vue";
 
 const props = defineProps(['element', 'isActive'])
 const bus = inject<any>('bus')
 const store = useProductStore()
-const getStyle = (style: StyleProps, isActive: boolean) => {
+const getStyle = (style: any, isActive: boolean) => {
+  let fontSize = Number(document.documentElement.style.fontSize.slice(0, -2))
   return {
-    top: `${style.y}px`,
-    left: `${style.x}px`,
-    width: `${style.width}px`,
-    height: `${style.height}px`,
+    top: `${style.y / fontSize}rem`,
+    left: `${style.x / fontSize}rem`,
+    width: `${style.width / fontSize}rem`,
+    height: `${style.height / fontSize}rem`,
     'z-index': `${isActive ? 10 : 1}`
   }
 }
@@ -90,12 +91,12 @@ const getPointStyle = (point: string) => {
       newTop = Math.floor(height / 2)
     }
   }
-
+  let fontSize = Number(document.documentElement.style.fontSize.slice(0, -2))
   const style = {
     marginLeft: '-4px',
     marginTop: '-4px',
-    left: `${newLeft}px`,
-    top: `${newTop}px`,
+    left: `${newLeft / fontSize}rem`,
+    top: `${newTop / fontSize}rem`,
     cursor: (pointCursorList as any)[point],
   }
 

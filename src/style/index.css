@@ -1,3 +1,8 @@
 #nprogress .bar {
     background: #1890ff !important;
 }
+
+.ant-message-custom-content {
+    display: flex;
+    align-items: center;
+}

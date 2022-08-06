@@ -5,10 +5,12 @@ import store from './store'
 import router from '@/router'
 import FunButton from "@/components/components-list/Fbutton.vue";
 import EventBus from '@/utils/event-bus'
+import 'amfe-flexible'
 import '@/style/tailwind-base.css'
 import "ant-design-vue/dist/antd.css";
 import "@/style/tailwind.css"
 import "@/style/index.css"
+import '@/utils/rem.js'
 const app = createApp(App)
 const bus =new EventBus()
 app.provide('bus',bus)

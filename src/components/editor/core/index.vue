@@ -3,7 +3,7 @@
     <div class="h-full" style="width: 14vw" >
       <Navigation ></Navigation>
     </div>
-    <div class="bg-white h-full rounded-xl" style="width: 70vw">
+    <div class="bg-white h-full rounded-xl" style="width: 65vw;height: 43vw">
       <Main></Main>
     </div>
   </div>

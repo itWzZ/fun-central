@@ -34,6 +34,9 @@ onUnmounted(() => {
 
 <style scoped lang="scss">
 :deep(.ant-tabs-tab) {
-  padding: 12px 20px;
+  padding: 0.75rem 1.65rem;
+}
+:deep(.ant-tabs-tab + .ant-tabs-tab){
+  margin: auto;
 }
 </style>
